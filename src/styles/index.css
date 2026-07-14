@@ -125,13 +125,13 @@ body {
     margin-bottom: 1rem;
 }
 .output-panel-actions button, .sql-input-header button {
-    background: color-mix(in srgb, var(--background-color) 78%, black 22%)!important;
-    color: color-mix(in srgb, var(--text-color) 82%, var(--secondary-brand-color) 18%)!important;
+    background: var(--background-color)!important;
+    color: var(--secondary-brand-color)!important;
 }
 button {
     appearance: none;
-    border: 1px solid color-mix(in srgb, var(--secondary-brand-color) 28%, transparent);
-    background: linear-gradient(180deg, color-mix(in srgb, var(--brand-color) 24%, #ffffff 0%), color-mix(in srgb, var(--background-color) 65%, #000000 0%));
+    border: 1px solid var(--secondary-brand-color);
+    background: var(--brand-color);
     color: var(--text-color);
     cursor: pointer;
     font-family: var(--secondary-font-family);
@@ -145,33 +145,31 @@ button {
 
 
 button:hover {
-    transform: translateY(-1px);
-    border-color: color-mix(in srgb, var(--brand-color) 65%, var(--secondary-brand-color) 35%);
+    border-color:var(--secondary-brand-color);
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24);
 }
 
 button:active {
-    transform: translateY(0);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
 }
 
 button:focus-visible {
-    outline: 3px solid color-mix(in srgb, var(--secondary-brand-color) 72%, white);
+    outline: 3px solid var(--secondary-brand-color);
     outline-offset: 3px;
 }
 
 .format-tab,
 .mobile-tabs button {
-    background: color-mix(in srgb, var(--background-color) 78%, black 22%);
-    color: color-mix(in srgb, var(--text-color) 82%, var(--secondary-brand-color) 18%);
+    background: var(--background-color);
+    color: var(--secondary-brand-color);
 }
 
 .format-tab.active,
 .mobile-tabs button.active,
 .output-panel-actions button,
 .sql-input-clear {
-    background: linear-gradient(135deg, var(--brand-color), color-mix(in srgb, var(--brand-color) 42%, var(--secondary-brand-color) 58%));
-    border-color: color-mix(in srgb, var(--secondary-brand-color) 55%, var(--brand-color) 45%);
+    background: var(--brand-color);
+    border-color: var(--secondary-brand-color);
     color: var(--button-strong-text);
 }
 
