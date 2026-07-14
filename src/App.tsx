@@ -79,8 +79,8 @@ function App() {
          <div className="top-bar">
         <div className="top-bar-content">
           <div className="top-bar-logo">
-            <img src="/typeschema.svg" alt="TypeSchema" className="top-bar-logo-img" />
-            <h1>TypeSchema</h1>
+            <img src="/typewizard.svg" alt="TypeWizard" className="top-bar-logo-img" />
+            <h1>TypeWizard</h1>
           </div>
         </div>
       </div>

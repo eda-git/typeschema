@@ -44,7 +44,7 @@ const POLICY_CONTENT: Record<PolicyKey, { title: string; body: string[] }> = {
     cookie: {
         title: "Cookie Policy",
         body: [
-            "TypeSchema stores a small first-party cookie to remember whether you prefer light mode or dark mode when you return.",
+            "TypeWizard stores a small first-party cookie to remember whether you prefer light mode or dark mode when you return.",
             "The app may also use essential browser storage to remember interface preferences and keep the SQL conversion workspace responsive during your session.",
             "No advertising or third-party tracking cookies are required for the core SQL conversion flow.",
             "If analytics are introduced later, this policy should be updated to describe the provider, retention period, and opt-out controls.",
@@ -53,7 +53,6 @@ const POLICY_CONTENT: Record<PolicyKey, { title: string; body: string[] }> = {
     privacy: {
         title: "Privacy Policy",
         body: [
-            "Privacy Policy",
             "Effective Date: July 13, 2026",
             'core softworks ("we," "us," or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and protect your information when you visit our website.',
             'Information We Collect',
@@ -172,7 +171,7 @@ export default function AppFooter() {
             {!cookieConsent && (
                 <div className="cookie-banner" role="region" aria-label="Cookie consent">
                     <p>
-                        TypeSchema uses cookies only for theme preferences. You can accept or deny optional cookies.
+                        TypeWizard uses cookies only for theme preferences. You can accept or deny optional cookies.
                     </p>
                     <div className="cookie-banner-actions">
                         <button type="button" className="footer-link-button accept" onClick={onAcceptCookies}>
