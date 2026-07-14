@@ -1,0 +1,139 @@
+.app-footer {
+    width: 100%;
+    background: var(--footer-background);
+    min-height: 3em;
+    padding: 1em;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.core-softworks-logo {
+    background: url(/websafe.svg);
+    height: 3em;
+    width: 3em;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.app-footer-branding,
+.app-footer-links,
+.policy-dialog-header {
+    display: flex;
+    align-items: center;
+}
+
+.app-footer-links {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+.footer-link-button.accept {
+    background: var(--cookie-banner-accept);
+    color: var(--cookie-banner-accept-color);
+}
+.footer-link-button.deny {
+    background: var(--cookie-banner-deny);
+    color: var(--cookie-banner-deny-color);
+}
+.footer-link-button.learn-more {
+    background: var(--cookie-banner-accept);
+    color: var(--cookie-banner-accept-color);
+}
+.footer-link-button,
+.policy-dialog-close {
+    color: var(--cookie-banner-accept-color);
+    border: 1px solid var(--footer-border-color);
+    border-radius: 999px;
+    box-shadow: none;
+    font-size: 0.9rem;
+    padding: 0.45rem 0.9rem;
+}
+
+.footer-link-button:hover,
+.policy-dialog-close:hover {
+    background: var(--footer-hover-background);
+    box-shadow: none;
+}
+button.app-footer-link-button {
+    background: color-mix(in srgb, var(--background-color) 78%, black 22%);
+}
+.footer-theme-button {
+    font-weight: 800;
+}
+
+.policy-dialog-backdrop {
+    position: fixed;
+    inset: 0;
+    background: var(--dialog-backdrop);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    z-index: 9999;
+}
+
+.policy-dialog {
+    width: min(42rem, 100%);
+    background: var(--dialog-surface);
+    color: var(--dialog-text);
+    border-radius: 18px;
+    border: 1px solid var(--dialog-border-color);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    padding: 1.5rem;
+}
+
+.policy-dialog-header {
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.policy-dialog-header h2 {
+    margin: 0;
+}
+
+.policy-dialog-content p {
+    line-height: 1.6;
+    margin: 0 0 1rem;
+}
+
+.policy-dialog-content p:last-child {
+    margin-bottom: 0;
+}
+
+.cookie-banner {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 6.5rem;
+    z-index: 40;
+    background: var(--dialog-surface);
+    color: var(--dialog-text);
+    border: 1px solid var(--dialog-border-color);
+    border-radius: 14px;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.26);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.cookie-banner p {
+    margin: 0;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.cookie-banner-actions {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+

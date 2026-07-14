@@ -1,0 +1,37 @@
+:root[data-theme='light'] {
+	--background-color: #f6efe3;
+	--text-color: #2f2528;
+	--brand-color: #c95546;
+	--secondary-brand-color: #fff9f1;
+	--button-strong-text: #241d1f;
+	--input-border-color: rgba(47, 37, 40, 0.3);
+	--footer-background: #eadfcd;
+	--footer-foreground: #2f2528;
+	--footer-border-color: rgba(47, 37, 40, 0.22);
+	--footer-hover-background: rgba(201, 85, 70, 0.14);
+	--dialog-surface: #fffdf9;
+	--dialog-text: #2f2528;
+	--dialog-border-color: rgba(47, 37, 40, 0.16);
+	--dialog-backdrop: rgba(47, 37, 40, 0.42);
+    --cookie-banner-deny: #EB5E55;
+    --cookie-banner-accept: #3A3335;
+    --cookie-banner-deny-color: #FFF; 
+    --cookie-banner-accept-color: #fff;
+}
+
+:root[data-theme='light'] textarea#sql-textarea {
+    color: #000;
+}
+:root[data-theme="light"] .format-tab.active:hover, .mobile-tabs button.active:hover, .output-panel-actions button:hover, .sql-input-clear:hover {
+        border-color: 
+color-mix(in srgb, var(--brand-color) 65%, var(--secondary-brand-color) 35%)!important;
+}
+
+:root[data-theme="light"]  .sql-input-clear:hover {
+      background: linear-gradient(135deg, var(--brand-color), 
+color-mix(in srgb, var(--brand-color) 42%, var(--secondary-brand-color) 58%))!important;
+    border-color: 
+color-mix(in srgb, var(--secondary-brand-color) 55%, var(--brand-color) 45%)!important;
+    color: var(--button-strong-text)!important;
+}
+
