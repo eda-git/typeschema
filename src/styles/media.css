@@ -1,5 +1,14 @@
 
+@media (min-width: 769px) {
+    .output-panel-body {
+    max-height: 50vh;
+    overflow-y: auto;
+}
 
+.output-panel-actions {
+    padding-bottom: 2em;
+}
+}
 
 @media (max-width: 768px) {
     button.app-footer-link-button {
