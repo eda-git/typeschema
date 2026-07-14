@@ -1,6 +1,15 @@
+
+
+
 @media (max-width: 768px) {
+    button.app-footer-link-button {
+        font-size: 0.5rem;
+    }
     .mobile-tabs {
     padding: 1%;
+}
+.output-panel-actions {
+    padding-bottom: 1rem;
 }
 .format-tabs, .output-panel-actions, .mobile-tabs, .sql-input-header {
     display: flex;

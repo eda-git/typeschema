@@ -3,9 +3,8 @@
     background: var(--footer-background);
     min-height: 3em;
     padding: 1em;
-    position: absolute;
-    bottom: 0;
-    left: 0;
+    position: relative;
+    margin-top: auto;
     box-sizing: border-box;
     display: flex;
     align-items: center;
