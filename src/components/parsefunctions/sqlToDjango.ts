@@ -1,5 +1,5 @@
 import {
-  parseCreateTableStatements,
+  parseStatements,
   toPascalCase,
   baseSqlType,
   type ParsedColumn,
@@ -100,6 +100,6 @@ export function tablesToDjango(tables: ParsedTable[]): string {
 }
 
 export function sqlToDjango(sql: string): string {
-  const tables = parseCreateTableStatements(sql);
+  const tables = parseStatements(sql);
   return tablesToDjango(tables);
 }

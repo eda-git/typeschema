@@ -4,7 +4,7 @@
 // emits Zod's own syntax as a string, it doesn't import zod itself.
 
 import {
-  parseCreateTableStatements,
+  parseStatements,
   toPascalCase,
   baseSqlType,
   type ParsedTable,
@@ -68,6 +68,6 @@ export function tablesToZod(tables: ParsedTable[]): string {
 
 /** Public entry point — same shape as sqlToTypeScript for drop-in use. */
 export function sqlToZod(sql: string): string {
-  const tables = parseCreateTableStatements(sql);
+  const tables = parseStatements(sql);
   return tablesToZod(tables);
 }

@@ -66,7 +66,7 @@ export default function OutputPanel({ code, format, error }: OutputPanelProps) {
           </pre>
         ) : (
           <p className="output-panel-empty">
-            Paste a CREATE TABLE statement to see the output here.
+            Paste a CREATE TABLE or SELECT TABLE (incl with a join) statement to see the output here.
           </p>
         )}
       </div>

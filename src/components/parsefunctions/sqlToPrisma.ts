@@ -2,7 +2,7 @@
 // Converts CREATE TABLE statements to Prisma model definitions.
 
 import {
-  parseCreateTableStatements,
+  parseStatements,
   toPascalCase,
   baseSqlType,
   type ParsedTable,
@@ -75,6 +75,6 @@ export function tablesToPrisma(tables: ParsedTable[]): string {
 
 /** Public entry point — same shape as sqlToTypeScript for drop-in use. */
 export function sqlToPrisma(sql: string): string {
-  const tables = parseCreateTableStatements(sql);
+  const tables = parseStatements(sql);
   return tablesToPrisma(tables);
 }

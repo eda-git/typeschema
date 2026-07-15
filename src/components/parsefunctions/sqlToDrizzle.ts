@@ -3,7 +3,7 @@
 // (Postgres dialect via drizzle-orm/pg-core, the most common target).
 
 import {
-  parseCreateTableStatements,
+  parseStatements,
   toCamelCase,
   baseSqlType,
   type ParsedTable,
@@ -92,6 +92,6 @@ export function tablesToDrizzle(tables: ParsedTable[]): string {
 
 /** Public entry point — same shape as sqlToTypeScript for drop-in use. */
 export function sqlToDrizzle(sql: string): string {
-  const tables = parseCreateTableStatements(sql);
+  const tables = parseStatements(sql);
   return tablesToDrizzle(tables);
 }

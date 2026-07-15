@@ -163,3 +163,183 @@ export function toCamelCase(name: string): string {
 export function baseSqlType(sqlType: string): string {
   return sqlType.trim().toLowerCase().replace(/\(.*\)/, "").trim();
 }
+
+// ---------------------------------------------------------------------------
+// SELECT statement parsing
+// ---------------------------------------------------------------------------
+
+function parseSingleSelect(
+  sql: string,
+  tableMap: Map<string, ParsedTable>
+): ParsedTable | null {
+  const upper = sql.toUpperCase();
+
+  const selectIdx = upper.indexOf("SELECT");
+  const fromIdx = upper.search(/\bFROM\b/);
+  if (fromIdx === -1) return null;
+
+  const columnListStr = sql.slice(selectIdx + 6, fromIdx).trim();
+  const afterFrom = sql.slice(fromIdx + 4).trim();
+
+  // Trim at clause keywords so we only process FROM + JOIN section
+  const clauseEnd = afterFrom.search(
+    /\b(WHERE|GROUP\s+BY|HAVING|ORDER\s+BY|LIMIT)\b/i
+  );
+  const tableSection = (
+    clauseEnd === -1 ? afterFrom : afterFrom.slice(0, clauseEnd)
+  ).trim();
+
+  // Build alias -> real table name map (all lowercase)
+  const aliasMap = new Map<string, string>();
+
+  const fromTableMatch = tableSection.match(
+    /^(\w+)(?:\s+(?:AS\s+)?(\w+))?/i
+  );
+  if (!fromTableMatch) return null;
+
+  const mainTable = fromTableMatch[1];
+  const mainAlias = fromTableMatch[2] || mainTable;
+  aliasMap.set(mainAlias.toLowerCase(), mainTable.toLowerCase());
+
+  const joinRegex = /\bJOIN\s+(\w+)(?:\s+(?:AS\s+)?(\w+))?/gi;
+  let joinMatch: RegExpExecArray | null;
+  while ((joinMatch = joinRegex.exec(tableSection)) !== null) {
+    const jTable = joinMatch[1];
+    const jAlias = joinMatch[2] || jTable;
+    aliasMap.set(jAlias.toLowerCase(), jTable.toLowerCase());
+  }
+
+  // Parse selected columns
+  const columns: ParsedColumn[] = [];
+  const colParts = splitTopLevelCommas(columnListStr);
+
+  for (const part of colParts) {
+    const trimmed = part.trim();
+    if (!trimmed) continue;
+
+    // Wildcard: * or table.*
+    if (trimmed === "*" || /^\w+\.\*$/.test(trimmed)) {
+      const prefix = trimmed.includes(".")
+        ? trimmed.split(".")[0].toLowerCase()
+        : null;
+      const targets = prefix
+        ? ([aliasMap.get(prefix)].filter((x): x is string => x !== undefined))
+        : [...new Set(aliasMap.values())];
+
+      for (const tn of targets) {
+        const tbl = tableMap.get(tn);
+        if (tbl) columns.push(...tbl.columns.map((c) => ({ ...c })));
+      }
+      continue;
+    }
+
+    // [table.]column [AS alias]  — covers the common case
+    const colMatch = trimmed.match(
+      /^(?:(\w+)\.)?(\w+)(?:\s+(?:AS\s+)?(\w+))?\s*$/i
+    );
+    if (colMatch) {
+      const [, tablePrefix, colName, colAlias] = colMatch;
+      const finalName = colAlias || colName;
+      let resolved: ParsedColumn | null = null;
+
+      if (tablePrefix) {
+        const tn = aliasMap.get(tablePrefix.toLowerCase());
+        const tbl = tn ? tableMap.get(tn) : undefined;
+        resolved =
+          tbl?.columns.find(
+            (c) => c.name.toLowerCase() === colName.toLowerCase()
+          ) ?? null;
+      } else {
+        for (const tn of aliasMap.values()) {
+          const found = tableMap
+            .get(tn)
+            ?.columns.find(
+              (c) => c.name.toLowerCase() === colName.toLowerCase()
+            );
+          if (found) {
+            resolved = found;
+            break;
+          }
+        }
+      }
+
+      columns.push(
+        resolved
+          ? { ...resolved, name: finalName }
+          : {
+              name: finalName,
+              sqlType: "unknown",
+              nullable: true,
+              isPrimaryKey: false,
+              hasDefault: false,
+            }
+      );
+    } else {
+      // Complex expression (COALESCE, COUNT, etc.) — use alias if present
+      const aliasMatch = trimmed.match(/\bAS\s+(\w+)\s*$/i);
+      const name = aliasMatch
+        ? aliasMatch[1]
+        : `col${columns.length + 1}`;
+      columns.push({
+        name,
+        sqlType: "unknown",
+        nullable: true,
+        isPrimaryKey: false,
+        hasDefault: false,
+      });
+    }
+  }
+
+  if (columns.length === 0) return null;
+
+  // Result name: combine table names; add _query suffix to avoid collisions
+  const tableNames = [...new Set(aliasMap.values())];
+  const resultName = tableNames.join("_") + "_query";
+
+  return { name: resultName, columns };
+}
+
+function parseSelectStatements(
+  sql: string,
+  knownTables: ParsedTable[]
+): ParsedTable[] {
+  const tableMap = new Map<string, ParsedTable>(
+    knownTables.map((t) => [t.name.toLowerCase(), t])
+  );
+
+  // Split on semicolons; each SELECT is its own statement
+  const statements = sql
+    .split(";")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  return statements
+    .filter((s) => /^\s*SELECT\b/i.test(s))
+    .map((s) => parseSingleSelect(s, tableMap))
+    .filter((t): t is ParsedTable => t !== null);
+}
+
+/**
+ * Parses SQL containing CREATE TABLE and/or SELECT statements.
+ * CREATE TABLE definitions are parsed first; SELECT column types are resolved
+ * against them where possible.
+ * Throws if neither kind of statement is found.
+ */
+export function parseStatements(sql: string): ParsedTable[] {
+  let createTables: ParsedTable[] = [];
+  try {
+    createTables = parseCreateTableStatements(sql);
+  } catch {
+    // no CREATE TABLE statements — that's fine
+  }
+
+  const selectResults = parseSelectStatements(sql, createTables);
+
+  const all = [...createTables, ...selectResults];
+  if (all.length === 0) {
+    throw new Error(
+      "No CREATE TABLE or SELECT statements found."
+    );
+  }
+  return all;
+}

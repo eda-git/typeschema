@@ -1,5 +1,5 @@
 import {
-	parseCreateTableStatements,
+	parseStatements,
 	toPascalCase,
 	baseSqlType,
 	type ParsedColumn,
@@ -66,6 +66,6 @@ export function tablesToGraphql(tables: ParsedTable[]): string {
 }
 
 export function sqlToGraphql(sql: string): string {
-	const tables = parseCreateTableStatements(sql);
+	const tables = parseStatements(sql);
 	return tablesToGraphql(tables);
 }
